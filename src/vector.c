@@ -647,7 +647,15 @@ VectorCosineSimilarity(int dim, float *ax, float *bx)
 	}
 
 	/* Use sqrt(a * b) over sqrt(a) * sqrt(b) */
-	return (double) similarity / sqrt((double) norma * (double) normb);
+	//return (double) similarity / sqrt((double) norma * (double) normb);
+	float cos = similarity / sqrt(norma * normb);
+	float sim = cos;
+	if (cos >= 0.5) {
+		sim = cos + 2 * (cos - 0.5) * (1 - cos);
+	} else if (cos >= 0) {
+		sim = cos - 2 * (cos - 0.5) * (0 - cos);
+	}
+	return (double)sim;
 }
 
 /*

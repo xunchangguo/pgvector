@@ -970,14 +970,20 @@ sparsevec_cosine_distance(PG_FUNCTION_ARGS)
 		normb += bx[i] * bx[i];
 
 	/* Use sqrt(a * b) over sqrt(a) * sqrt(b) */
-	similarity /= sqrt((double) norma * (double) normb);
+	//similarity /= sqrt((double) norma * (double) normb);
+	double cos = similarity / sqrt((double) norma * (double) normb);
+    similarity = cos;
+    if (cos >= 0.5) {
+        similarity = cos + 2 * (cos - 0.5) * (1 - cos);
+    } else if (cos >= 0) {
+        similarity = cos - 2 * (cos - 0.5) * (0 - cos);
+    }
 
 #ifdef _MSC_VER
 	/* /fp:fast may not propagate NaN */
 	if (isnan(similarity))
 		PG_RETURN_FLOAT8(NAN);
 #endif
-
 	/* Keep in range */
 	if (similarity > 1)
 		similarity = 1.0;
