@@ -41,4 +41,4 @@ jobs:
           context: .
           push: true
           file: ./Dockerfile
-          tags: ghcr.io/xunchangguo/pgvector:pg17
+          tags: ghcr.io/xunchangguo/pgvector:pg17-c
